@@ -44,7 +44,7 @@ def check_password():
     return False
 
 # API functions
-def get_anthropic_response(prompt):
+def get_anthropic_response_old(prompt):
     try:
         if not ANTHROPIC_API_KEY:
             return "Error: Anthropic API key not configured"
@@ -63,7 +63,44 @@ def get_anthropic_response(prompt):
         return response.json()["content"][0]["text"]
     except Exception as e:
         return f"Error with Anthropic API: {str(e)}"
-
+def get_anthropic_response(prompt):
+    try:
+        if not ANTHROPIC_API_KEY:
+            return "Error: Anthropic API key not configured"
+            
+        headers = {
+            "x-api-key": ANTHROPIC_API_KEY,
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json"
+        }
+        
+        data = {
+            "model": "claude-3-opus-20240229",
+            "max_tokens": 1000,
+            "messages": [
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.7
+        }
+        
+        response = requests.post(
+            "https://api.anthropic.com/v1/messages", 
+            json=data, 
+            headers=headers
+        )
+        
+        # Print response for debugging
+        print(f"Status Code: {response.status_code}")
+        print(f"Response: {response.text[:200]}...")  # Print first 200 chars
+        
+        response.raise_for_status()
+        result = response.json()
+        
+        # The structure is result["content"][0]["text"] for the response text
+        return result["content"][0]["text"]
+    except Exception as e:
+        return f"Error with Anthropic API: {str(e)}\n\nDetails: {getattr(e, 'response', {}).get('text', '')}"
+        
 def get_openai_response(prompt):
     try:
         if not OPENAI_API_KEY:
