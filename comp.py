@@ -80,7 +80,7 @@ def get_anthropic_response(prompt):
             "messages": [
                 {"role": "user", "content": prompt}
             ],
-            "temperature": 0.7
+            "temperature": 0.9
         }
         
         response = requests.post(
