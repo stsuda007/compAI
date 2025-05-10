@@ -148,15 +148,15 @@ def main():
                 
                 # Display the responses
                 with col1:
-                    st.subheader("{ANTHROPIC_MODEL}(Anthropic)")
+                    st.subheader(f"{ANTHROPIC_MODEL}(Anthropic)")
                     st.markdown(anthropic_response)
                 
                 with col2:
-                    st.subheader("{OPENAI_MODEL}(OpenAI)")
+                    st.subheader(f"{OPENAI_MODEL}(OpenAI)")
                     st.markdown(openai_response)
                 
                 with col3:
-                    st.subheader("Fine-tuned OpenAI")
+                    st.subheader(f"Fine-tuned OpenAI")
                     st.markdown(finetuned_response)
 
 # Run the app with password protection
