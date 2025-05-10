@@ -8,7 +8,7 @@ import os
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 ANTHROPIC_MODEL = "claude-3-5-sonnet-20241022"
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
-OPENAI_MODEL ="o4-mini-2025-04-16"
+OPENAI_MODEL ="o4-mini"
 FINETUNED_MODEL_ID = os.getenv("FINETUNED_MODEL_ID", "")
 
 # Alternative: For local development only (not recommended for production)
