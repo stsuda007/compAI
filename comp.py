@@ -6,7 +6,9 @@ import os
 # For local development, you can set these as environment variables before running the app
 # For deployment, you'll configure these in the platform (Streamlit Cloud, AWS, etc.)
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
+ANTHROPIC_MODEL = "claude-3-5-sonnet-20241022"
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+OPENAI_MODEL ="o4-mini-2025-04-16"
 FINETUNED_MODEL_ID = os.getenv("FINETUNED_MODEL_ID", "")
 
 # Alternative: For local development only (not recommended for production)
@@ -44,25 +46,6 @@ def check_password():
     return False
 
 # API functions
-def get_anthropic_response_old(prompt):
-    try:
-        if not ANTHROPIC_API_KEY:
-            return "Error: Anthropic API key not configured"
-            
-        headers = {
-            "x-api-key": ANTHROPIC_API_KEY,
-            "content-type": "application/json"
-        }
-        data = {
-            "model": "claude-3-opus-20240229",
-            "max_tokens": 1000,
-            "messages": [{"role": "user", "content": prompt}]
-        }
-        response = requests.post("https://api.anthropic.com/v1/messages", json=data, headers=headers)
-        response.raise_for_status()
-        return response.json()["content"][0]["text"]
-    except Exception as e:
-        return f"Error with Anthropic API: {str(e)}"
 def get_anthropic_response(prompt):
     try:
         if not ANTHROPIC_API_KEY:
@@ -75,7 +58,7 @@ def get_anthropic_response(prompt):
         }
         
         data = {
-            "model": "claude-3-opus-20240229",
+            "model": ANTHROPIC_MODEL,
             "max_tokens": 1000,
             "messages": [
                 {"role": "user", "content": prompt}
@@ -111,7 +94,7 @@ def get_openai_response(prompt):
             "Content-Type": "application/json"
         }
         data = {
-            "model": "gpt-4-turbo",
+            "model": OPENAI_MODEL,
             "messages": [{"role": "user", "content": prompt}],
             "max_tokens": 1000
         }
@@ -165,11 +148,11 @@ def main():
                 
                 # Display the responses
                 with col1:
-                    st.subheader("Claude (Anthropic)")
+                    st.subheader("{ANTHROPIC_MODEL}(Anthropic)")
                     st.markdown(anthropic_response)
                 
                 with col2:
-                    st.subheader("GPT-4 (OpenAI)")
+                    st.subheader("{OPENAI_MODEL}(OpenAI)")
                     st.markdown(openai_response)
                 
                 with col3:
