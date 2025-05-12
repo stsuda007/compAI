@@ -105,6 +105,16 @@ def get_openai_response(prompt):
         return f"Error with OpenAI API: {str(e)}"
 
 def get_finetuned_openai_response(prompt):
+    support_prompt =f"""
+ただし、回答については以下のフォーマットで回答してください。
+■質問の形式が　～　とは何ですか？という定義や概念の説明を求める場合
+［一般論］一般に、～とはXXXです。　（ここでXXXには、ネットで検索できるような一般的な情報を丁寧に説明します)
+ [特殊論］特に、新規事業やイノベーションの文脈においては、YYYという理解が重要になります。　（ここで、ファインチューニングを行った特徴的なポイントを記述します。存在しなければ、述べる必要はありません。）
+
+■質問の形式が　～　をするにはどうですか？というやり方や手順を求める場合。
+［一般論］一般に～を行うにはXXXな進め方が有効です。　（ここでXXXには、ネットで検索できるような一般的な情報を丁寧に説明します)
+ [特殊論］特に、新規事業やイノベーションの文脈においては、YYYというステップが重要になります。　（ここで、ファインチューニングを行った特徴的なポイントを記述します。存在しなければ、述べる必要はありません。）
+"""
     try:
         if not OPENAI_API_KEY or not FINETUNED_MODEL_ID:
             return "Error: OpenAI API key or fine-tuned model ID not configured"
@@ -115,7 +125,7 @@ def get_finetuned_openai_response(prompt):
         }
         data = {
             "model": FINETUNED_MODEL_ID,
-            "messages": [{"role": "user", "content": prompt}],
+            "messages": [{"role": "user", "content": f"{prompt}{support_prompt}"],
             "max_tokens": 1000
         }
         response = requests.post("https://api.openai.com/v1/chat/completions", json=data, headers=headers)
