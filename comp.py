@@ -125,7 +125,7 @@ def get_finetuned_openai_response(prompt):
         }
         data = {
             "model": FINETUNED_MODEL_ID,
-            "messages": [{"role": "user", "content": f"{prompt}{support_prompt}}"],
+            "messages": [{"role": "user", "content": f"{prompt}{support_prompt}"}],
             "max_tokens": 1000
         }
         response = requests.post("https://api.openai.com/v1/chat/completions", json=data, headers=headers)
